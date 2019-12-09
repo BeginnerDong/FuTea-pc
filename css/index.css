@@ -1,0 +1,34 @@
+
+
+/* 巨头打造 */
+.ind-box1 .item{width: 385px; background: #FFF;box-shadow: 0 0 5px rgba(0,0,0,0.15);}
+.ind-box1 .item .pic{width: 100%; height: 205px;overflow: hidden;}
+.ind-box1 .item .pic img{width: 100%;height: 100%;  transition: all 1s;}
+.ind-box1 .item .tit{margin: 20px 4%;box-sizing: border-box; font-size: 16px;}
+.ind-box1 .item:hover img{transform: scale(1.1);}
+
+/* 高额补贴 */
+.ind-box2 li{width: 320px;height: 170px;background: #FFFDEF;padding: 10px;box-sizing: border-box;margin-right: 30px;}
+.ind-box2 li:last-child{margin-right: 0;}
+.ind-box2 li .icon{width: 50px; height: 50px;margin: 0 auto;}
+.ind-box2 li .tit{margin-top: 15px;height: 32px; box-sizing: border-box;overflow: hidden;display:flex;align-items:center;justify-content:center;line-height: 20px;font-size: 17px;}
+
+.pinzhi-picOne .name{position: absolute; top: 0;right: 0;bottom: 0;left: 0;width: 100%;box-sizing: border-box;padding: 10px;background: rgba(0,0,0,0.5);color: #fff;}
+.pinzhi-picFour{flex-wrap: wrap;}
+.pinzhi-picFour .item{width: 580px;height:270px;margin-top: 30px;overflow: hidden;}
+.pinzhi-picFour .item img{width: 100%; height: 100%; display: block; transition: all 1s;}
+.pinzhi-picFour .item:hover img{transform: scale(1.1);}
+
+/* 自买省钱 */
+.zimai-box1 .item{width: 50%; height: 359px;box-sizing: border-box;background: url(../images/home-icon8.png) no-repeat 0 0/100% 100%;padding: 70px 4% 30px 4%;}
+.zimai-box1 .item .tit{font-size: 26px; margin-bottom:60px;}
+.zimai-box1 .item .tex{font-size: 18px;line-height: 24px;margin-bottom: 30px;}
+.zimai-box1 .item.left{text-align: right;background: url(../images/home-icon7.png) no-repeat 0 0/100% 100%;}
+
+.zimai-box2{flex-wrap: wrap;align-items: flex-start;}
+.zimai-box2 .item{width: 33.3%;padding: 10px 4%;box-sizing: border-box;}
+.zimai-box2 .item .icon{width: 50px;height: 50px;display: block;margin: 0px auto;}
+.zimai-box2 .item p{padding: 15px 0; width: 300px; line-height: 30px;font-size: 16px;}
+
+
+

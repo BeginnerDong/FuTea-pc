@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<title>个人中心</title>
+		<script type="text/javascript" src="./js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<script type="text/javascript" src="js/include.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/public.css">
+	</head>
+
+<body class="f5bj">
+	<div id="app">
+		<include src="header.html"></include>
+		
+		<div class="fs15 mg0" style="width: 900px;">
+			<h1 class="ftn pdt50 pdb30 center fs18">选择会员</h1>
+			<div class="seltTable center whiteBj">
+				<table border="0" cellspacing="" cellpadding="">
+					<tr>
+						<td class="one">会员级别</td>
+						<td class="two">金额/重量/质量</td>
+						<td class="three">一级分享补贴</td>
+						<td class="four">二级分享补贴</td>
+						<td class="five">复购价格/斤</td>
+					</tr>
+					<tr v-for="(item,index) in tableDate" :key="index">
+						<td class="one flexCenter"  @click="changeVIP(index)"><img class="seltIcon" :src="seltCurr==index?'images/package-icon1.png':'images/package-icon.png'" alt="">{{item.level}}</td>
+						<td class="two">{{item.specs}}</td>
+						<td class="three">{{item.classA}}</td>
+						<td class="four">{{item.classB}}</td>
+						<td class="five">{{item.weight}}</td>
+					</tr>
+				</table>
+			</div>
+			
+			<h1 class="ftn pdt50 pdb30 center fs18">请选择填写种类和重量</h1>
+			<div class="center whiteBj">
+				<table  border="0" cellspacing="" cellpadding="">
+					<tr>
+						<td rowspan="7" style="width:30%; line-height: 32px;">
+							<p>茶叶品种和重量</p>
+							<p>(多选)</p>
+							<p>注：总重量与套餐重量相符</p>
+						</td>
+						<td>种类</td>
+						<td>重量(斤)</td>
+					</tr>
+					<tr v-for="(item,index) in varietyData" :key="index">
+						<td>{{item.title}}</td>
+						<td class="flexCenter">
+							<div class="numBox flex">
+								<span @click="counter(index,'-')">-</span>
+								<span class="num">{{item.count}}</span>
+								<span class="plus" @click="counter(index,'+')">+</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+			<h1 class="ftn pdt50 pdb30 center fs18">收货人信息</h1>
+			<div class="whiteBj boxShaow pdlr4">
+				<div class="inforTwo pdt30 pdb10">
+					<p class="item flex">
+						<span>收货人姓名：</span>
+						<span class="input"><input type="text" name="" value="战歌" /></span>
+					</p>
+					<p class="item flex">
+						<span>收货人电话：</span>
+						<span class="input"><input type="text" name="" value="15623235652" /></span>
+					</p>
+					<p class="item flex">
+						<span>收货人地址：</span>
+						<span class="input"><input type="text" name="" value="陕西省西安市雁塔区高新大都荟" /></span>
+					</p>
+				</div>
+			</div>
+		
+			<div class="submitbtn" style="margin-top: 80px;">
+				<button class="Wbtn" type="button" @click="ewmPayShow">确定</button>
+			</div>
+			<div class="h100"></div>
+			
+			
+			<div class="black-bj" v-show="is_show"></div>
+			<div class="zhufuALert whiteBj center" v-show="is_ewmPayShow">
+				<h1 class="price red fs24 ftn">￥45623</h1>
+				<p class="fs14 pdt20">支付宝账号：15678898545</p>
+				<img class="ewm" src="images/home-img9.jpg" alt="">
+				<p class="fs12 color6">支付仅支持支付宝，请用支付宝扫码进行支付</p>
+				<span class="closeBtn" @click="ewmPayShow">×</span>
+			</div>
+			
+		</div>
+		
+	</div>
+</body>
+
+	
+	<script type="text/javascript">
+		var app = new Vue({
+		    el: '#app',
+		    data:function(){
+		        return {
+		        	banner_index:0,
+					is_show:false,
+					wx_show:2,
+					mainData: [],
+					labelData: [],
+					tableDate:[
+						{level:'皇冠',specs:'8000/5斤/特级',classA:'25%',classB:'5%',weight:'1600/斤'},
+						{level:'钻石',specs:'5000/3斤/特级',classA:'15%',classB:'2.5%',weight:'1700/斤'},
+						{level:'黄金',specs:'2000/1斤/特级',classA:'6%',classB:'1%',weight:'2000/斤'},
+						{level:'白银',specs:'1000/1斤/特级',classA:'3%',classB:'0.5%',weight:'3000/斤'}
+					],
+					seltCurr:0,
+					varietyData:[
+						{title:'金骏眉',count:'0'},
+						{title:'铁观音',count:'0'},
+						{title:'大红袍',count:'0'},
+						{title:'西湖龙井',count:'0'},
+						{title:'碧螺春',count:'0'},
+						{title:'茉莉花茶',count:'0'}
+					],
+					is_ewmPayShow:false
+		        }
+		    },
+		    methods: {
+				changeVIP(index){
+					const self = this;
+					self.seltCurr = index
+				},
+				counter(index,type) {
+					const self = this;
+					if (type == '+') {
+						self.varietyData[index].count++;
+					} else {
+						if (self.varietyData[index].count > 1) {
+							self.varietyData[index].count--;
+						}
+					};
+					self.$Utils.setStorageArray('cartData', self.varietyData[index], 'id', 999);
+					self.countTotalPrice();
+				},
+				ewmPayShow(){
+					const self = this;
+					self.is_ewmPayShow = !self.is_ewmPayShow;
+					self.is_show = !self.is_show
+				},
+				getMainData: function(id){
+				    var self = this;
+				    var callback = function(res){
+				        console.log('getMainData', res);
+				        self.mainData.push.apply(self.mainData,res.info.data);
+				        for (var i = 0; i < self.mainData.length; i++) {
+				        	self[self.mainData[i].title] = self.mainData[i];
+				        };
+				        self.getNewsData()
+				    };
+					console.log('self.mainData',self.mainData)
+				    window.base.labelGet(postData, callback);
+				}
+				
+		    }
+		});
+	</script>
+	
+	<style>
+		.seltTable table tr:nth-of-type(2n){background: #F5F5F5;}
+		.seltIcon{width: 15px; height: 15px;margin-right: 5px;}
+		table{width: 100%;border-top:1px solid #E8E8E8;border-left:1px solid #E8E8E8;}
+		table tr{border-bottom: 1px solid #E8E8E8;}
+		table tr td{border-right: 1px solid #E8E8E8;padding: 8px 3px;box-sizing: border-box;height: 60px;}
+		
+		
+		/* 数量加减 */
+		.numBox span{ width: 20px; height: 20px;line-height: 20px;color: #fff; background: #dfdfdf;font-size:16px ; text-align: center; border-radius: 4px;}
+		.numBox span.num{ width: 35px;background: #fff; color: #333; font-size: 13px;border-radius: 0;}
+		.numBox span.plus{background: #2DC1FF;}
+		
+		/* 收货人信息 */
+		.inforTwo p{margin-bottom:30px;}
+		.inforTwo .input{width: 84%;margin-left: 30px;}
+		.inforTwo .input input{width: 100%; line-height: 20px;display: block;background: #f8f8f8;padding: 5px 20px; color: #222;box-sizing: border-box;}
+		
+		.zhufuALert{width: 600px;padding: 50px 4% 80px 4%;box-sizing: border-box;position: fixed;top: 50%;left: 50%;transform: translate(-50%,-50%);z-index: 60;}
+		.zhufuALert .ewm{margin: 25px auto; display: block;width: 180px; height: 180px;}
+		.zhufuALert .closeBtn{top: auto; bottom: 20px;color: #999;border: 1px solid #999;line-height: 20px;}
+		
+		.submitbtn .Wbtn{line-height: 50px; height: 50px;border-radius: 0;font-size: 16px;}
+	</style>
+</html>

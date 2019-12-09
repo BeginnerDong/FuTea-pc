@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="renderer" content="webkit">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<title>赚钱攻略</title>
+		<script type="text/javascript" src="./js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/base.js"></script>
+		<script type="text/javascript" src="js/include.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/public.css">
+		<link type="text/css" rel="stylesheet" href="css/banner.css">
+		<style>
+		.liuchengBox{flex-wrap: wrap; align-items: flex-start;}
+		.liuchengBox .item{width: 20%;padding: 15px 0;}
+		.liuchengBox .item .icon{width: 80px;height: 80px; margin: 10px auto;position: relative;}	
+		.liuchengBox .item .icon img{width: 100%; height: 100%; display: block;}
+		.liuchengBox .item .icon::after{content: '';width: 100px;height: 1px; border-bottom: 1px dashed #2DC1FF; position: absolute; top: 50%;left: 100px;transform: translateY(-50%);}
+		.liuchengBox .item p{margin: 15px auto;width:55%; line-height: 24px;}
+		.liuchengBox .item:last-child .icon::after{width: 0;}
+		
+		.table{border-top:1px solid #e2e2e2;border-left:1px solid #e2e2e2;}
+		.table span{padding: 20px 3px;border-right:1px solid #e2e2e2;border-bottom:1px solid #e2e2e2;box-sizing: border-box;line-height:24px;height: 60px;display: flex; justify-content: center; align-items: center;}
+		.table span.one{width: 16%;}
+		.table span.two{width: 30%;}
+		.table span.three{width: 18%;}
+		.table span.four{width: 18%;}
+		.table span.five{width: 18%;}
+		.table .item:nth-of-type(2n){background: #F5F5F5;}
+		</style>
+	</head>
+
+<body class="f5bj">
+	<div id="app">
+		<include src="header.html"></include>
+		
+		<!-- banner end-->
+		<div class="whiteBj">
+			<div class="w1200 whiteBj pdlr4 pdb40">
+				<div class="pubtit flexColumn">
+					<div class="flexCenter pdb10">
+						<span class="xian"></span>
+						<h1 class="title">分享赚钱</h1>
+						<span class="xian"></span>
+					</div>
+				</div>
+				<div class="liuchengBox fs16 center flexEnd">
+					<div class="item">
+						<div class="icon">
+							<img class="icon" src="images/strategy-icon.png" >
+						</div>
+						<p>打造最简单社交电商模式</p>
+					</div>
+					<div class="item">
+						<div class="icon">
+							<img class="icon" src="images/strategy-icon1.png" >
+						</div>
+						<p>购买福茶会员</p>
+					</div>
+					<div class="item">
+						<div class="icon">
+							<img class="icon" src="images/strategy-icon2.png" >
+						</div>
+						<p>获得福茶代理资格</p>
+					</div>
+					<div class="item">
+						<div class="icon">
+							<img class="icon" src="images/strategy-icon4.png" >
+						</div>
+						<p>其他会员分享，在获得高额补贴</p>
+					</div>
+					<div class="item">
+						<div class="icon">
+							<img class="icon" src="images/strategy-icon3.png" >
+						</div>
+						<p>分享赚钱，获得高额补贴</p>
+					</div>
+				</div>
+				<div class="fs16 pdtb20 line30">
+					<p>阿里优选————福茶，打造最简单社交电商模式，分享就可赚钱。会员购买相应金额的福茶产品，就自动获得福茶代理资格，获取福茶代理资格后，分享给其他会员加入，可得到高额分享补贴，所邀请的会员在分享给其他用户，还可以获得高额补贴，当A邀请B，B邀请C时，即A邀请B，A获得补贴，B邀请C,A再次获得补贴。B称为A的以及邀请会员，C称为A的以及邀请会员，C称为A的二级邀请会员。</p>
+				</div>
+			</div>
+		</div>
+		<div class="w1200">
+			<div class="pdt40 pdb20 fs16">
+				<p>具体补贴金额和比例依照下图：</p>
+			</div>
+			<div class="table fs14 center whiteBj">
+				<div class="item flexRowBetween">
+					<span class="one">会员级别</span>
+					<span class="two">金额/重量/质量</span>
+					<span class="three">一级分享补贴</span>
+					<span class="four">二级分享补贴</span>
+					<span class="five">复购价格/斤</span>
+				</div>
+				<div class="item flexRowBetween" v-for="(item,index) in tableDate" :key="index">
+					<span class="one">{{item.level}}</span>
+					<span class="two">{{item.specs}}</span>
+					<span class="three">{{item.classA}}</span>
+					<span class="four">{{item.classB}}</span>
+					<span class="five">{{item.weight}}</span>
+				</div>
+			</div>
+			<div class="h44"></div>
+			<h1 class="fs18 pdb30">例如：</h1>
+			<div class="textcOnt fs16 line30 pdb30">
+				<p class="text">小明购买5斤的福茶产品成为皇冠会员时，假设十月份共邀请的一级皇冠会员10人，二级皇冠会员为100人，则他的当月邀请收益为</p>
+				<p class="count pubColor fs24 pdtb30 center">8000×10×25%+8000×5%=6万元</p>
+				<p class="text">十月过后，即便小明不再邀请新的会员，随着二级邀请数量的增多，小明每月依然有3万到5万元的收入，此外，小明所邀请的一级会员和二级会员此后购买的茶叶，小明永久享受高额的补贴，补贴比例参考上图。</p>
+			</div>
+			<div class="h50"></div>
+		</div>
+			
+		<include src="footer.html"></include>
+		
+	</div>
+</body>
+
+<script type="text/javascript">
+	var app = new Vue({
+		el: '#app',
+		data:function(){
+			return {
+				banner_index:0,
+				is_show:false,
+				wx_show:2,
+				mainData: [],
+				labelData: [],
+				swipeBanner:[
+					"images/banner.png",
+					"images/banner.png",
+					"images/banner.png"
+				],
+				tableDate:[
+					{level:'皇冠',specs:'8000/5斤/特级',classA:'25%',classB:'5%',weight:'1600/斤'},
+					{level:'钻石',specs:'5000/3斤/特级',classA:'15%',classB:'2.5%',weight:'1700/斤'},
+					{level:'黄金',specs:'2000/1斤/特级',classA:'6%',classB:'1%',weight:'2000/斤'},
+					{level:'白银',specs:'1000/1斤/特级',classA:'3%',classB:'0.5%',weight:'3000/斤'}
+				]
+			}
+		},
+		methods: {
+			getMainData: function(id){
+				var self = this;
+				var callback = function(res){
+					console.log('getMainData', res);
+					self.mainData.push.apply(self.mainData,res.info.data);
+					for (var i = 0; i < self.mainData.length; i++) {
+						self[self.mainData[i].title] = self.mainData[i];
+					};
+					self.getNewsData()
+				};
+				console.log('self.mainData',self.mainData)
+				window.base.labelGet(postData, callback);
+			}
+			
+		}
+	});
+</script>
+
+</html>

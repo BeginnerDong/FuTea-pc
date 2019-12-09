@@ -1,0 +1,11 @@
+		
+/*banner轮播*/
+.ind_Tbanner ul{position:relative;height:100%;z-index:1;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;-webkit-transition-property:-webkit-transform;-moz-transition-property:-moz-transform;-o-transition-property:-o-transform;-ms-transition-property:-ms-transform;transition-property:transform;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box}
+.ind_Tbanner ul li {-webkit-flex-shrink: 0; -ms-flex: 0 0 auto; flex-shrink: 0;width: 100%; height: 100%; position: relative;}
+.ind_Tbanner ul li img{ width: 100%; display: block;}
+.ind_Tbanner .btnav{ width: 100%; text-align: center; position: absolute; bottom:20px; left: 0;z-index: 9;}
+.ind_Tbanner .btnav span{width: 15px; height:3px; display:inline-block; margin: 0 5px; border-radius: 3px; background:#fff; box-shadow: 0 0 5px rgba(0,0,0,0.4);}
+.ind_Tbanner .btnav span.swiper-pagination-bullet-active{ background: #20bf27;}
+
+
+
