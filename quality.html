@@ -44,8 +44,8 @@
 				<img class="w" src="images/pinzhi-img.jpg" >
 			</div>
 			<div class="sixPic flexRowBetween fs12">
-				<div class="item" v-for="(item,index) in goodTeaDate" :key="index">
-					<div class="pic"><img :src="item.imgUrl" ></div>
+				<div class="item" v-for="(item,index) in artOneData.child" :key="index">
+					<div class="pic"><img :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" ></div>
 					<p class="name">{{item.title}}</p>
 				</div>
 			</div>
@@ -65,8 +65,8 @@
 					<img class="w" src="images/pinzhi-img7.jpg" >
 				</div>
 				<div class="sixPic flexRowBetween fs12">
-					<div class="item" v-for="(item,index) in packingDate" :key="index">
-						<div class="pic"><img :src="item.imgUrl" ></div>
+					<div class="item" v-for="(item,index) in artTwoData.child" :key="index">
+						<div class="pic"><img :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" ></div>
 						<p class="name">{{item.title}}</p>
 					</div>
 				</div>
@@ -87,8 +87,8 @@
 					<img class="w" src="images/pinzhi-img14.jpg" >
 				</div>
 				<div class="sixPic flexRowBetween fs12">
-					<div class="item" v-for="(item,index) in qualityDate" :key="index">
-						<div class="pic"><img :src="item.imgUrl" ></div>
+					<div class="item" v-for="(item,index) in artThreeData.child" :key="index">
+						<div class="pic"><img :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" ></div>
 						<p class="name">{{item.title}}</p>
 					</div>
 				</div>
@@ -109,8 +109,8 @@
 					<img class="w" src="images/pinzhi-img22.png" >
 				</div>
 				<div class="sixPic flexRowBetween fs12">
-					<div class="item" v-for="(item,index) in addrsOutDate" :key="index">
-						<div class="pic"><img :src="item.imgUrl" ></div>
+					<div class="item" v-for="(item,index) in artFourData.child" :key="index">
+						<div class="pic"><img :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" ></div>
 						<p class="name">{{item.title}}</p>
 					</div>
 				</div>
@@ -131,8 +131,8 @@
 					<img class="w" src="images/pinzhi-img28.jpg" >
 				</div>
 				<div class="sixPic flexRowBetween fs12">
-					<div class="item" v-for="(item,index) in handMadeDate" :key="index">
-						<div class="pic"><img :src="item.imgUrl" ></div>
+					<div class="item" v-for="(item,index) in artFiveData.child" :key="index">
+						<div class="pic"><img :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" ></div>
 						<p class="name">{{item.title}}</p>
 					</div>
 				</div>
@@ -157,67 +157,179 @@
 				mainData: [],
 				labelData: [],
 				// 六种好茶
-				goodTeaDate:[
-					{imgUrl:'images/pinzhi-img1.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img2.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img3.jpg',title:'铁观音'},
-					{imgUrl:'images/pinzhi-img4.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img5.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img6.jpg',title:'铁观音'}
-				],
-				// 精美包装
-				packingDate:[
-					{imgUrl:'images/pinzhi-img8.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img9.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img10.jpg',title:'铁观音'},
-					{imgUrl:'images/pinzhi-img11.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img12.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img13.jpg',title:'铁观音'}
-				],
-				// 特级品质
-				qualityDate:[
-					{imgUrl:'images/pinzhi-img15.jpg'},
-					{imgUrl:'images/pinzhi-img16.jpg'},
-					{imgUrl:'images/pinzhi-img17.jpg'},
-					{imgUrl:'images/pinzhi-img18.jpg'},
-					{imgUrl:'images/pinzhi-img19.jpg'},
-					{imgUrl:'images/pinzhi-img20.jpg'}
-				],
-				// 产地直邮
-				addrsOutDate:[
-					{imgUrl:'images/pinzhi-img22.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img23.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img24.jpg',title:'铁观音'},
-					{imgUrl:'images/pinzhi-img25.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img26.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img27.jpg',title:'铁观音'}
-				],
-				// 手工制作
-				handMadeDate:[
-					{imgUrl:'images/pinzhi-img29.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img30.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img31.jpg',title:'铁观音'},
-					{imgUrl:'images/pinzhi-img32.jpg',title:'金骏眉'},
-					{imgUrl:'images/pinzhi-img33.jpg',title:'大红袍'},
-					{imgUrl:'images/pinzhi-img34.jpg',title:'铁观音'}
-				]
+				artOneData:{},
+				artTwoData:{},
+				artThreeData:{},
+				artFourData:{},
+				artFiveData:{},
 			}
 		},
+		
+		created: function() {
+			var self = this;
+			self.getArtOneData();
+			self.getArtTwoData();
+			self.getArtThreeData();
+			self.getArtFourData();
+			self.getArtFiveData();	
+		},
+		
 		methods: {
-			getMainData: function(id){
-				var self = this;
-				var callback = function(res){
-					console.log('getMainData', res);
-					self.mainData.push.apply(self.mainData,res.info.data);
-					for (var i = 0; i < self.mainData.length; i++) {
-						self[self.mainData[i].title] = self.mainData[i];
-					};
-					self.getNewsData()
-				};
-				console.log('self.mainData',self.mainData)
-				window.base.labelGet(postData, callback);
-			}
 			
+			getArtOneData: function(){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'六种好茶'
+					}
+				};
+				postData.getAfter = {
+					child:{
+						tableName:'Article',
+						middleKey:'id',
+						key:'menu_id',
+						searchItem:{
+							status:1
+						},
+						condition:'=',
+						order:{
+							create_time:'asc'
+						}
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.artOneData = res.info.data[0];
+					}
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
+			
+			getArtTwoData: function(){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'精美包装'
+					}
+				};
+				postData.getAfter = {
+					child:{
+						tableName:'Article',
+						middleKey:'id',
+						key:'menu_id',
+						searchItem:{
+							status:1
+						},
+						condition:'=',
+						order:{
+							create_time:'asc'
+						}
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.artTwoData = res.info.data[0];
+					}
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
+			
+			getArtThreeData: function(){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'特级品质'
+					}
+				};
+				postData.getAfter = {
+					child:{
+						tableName:'Article',
+						middleKey:'id',
+						key:'menu_id',
+						searchItem:{
+							status:1
+						},
+						condition:'=',
+						order:{
+							create_time:'asc'
+						}
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.artThreeData = res.info.data[0];
+					}
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
+			
+			getArtFourData: function(){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'产地直邮'
+					}
+				};
+				postData.getAfter = {
+					child:{
+						tableName:'Article',
+						middleKey:'id',
+						key:'menu_id',
+						searchItem:{
+							status:1
+						},
+						condition:'=',
+						order:{
+							create_time:'asc'
+						}
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.artFourData = res.info.data[0];
+					}
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
+			
+			getArtFiveData: function(){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'手工制作'
+					}
+				};
+				postData.getAfter = {
+					child:{
+						tableName:'Article',
+						middleKey:'id',
+						key:'menu_id',
+						searchItem:{
+							status:1
+						},
+						condition:'=',
+						order:{
+							create_time:'asc'
+						}
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.artFiveData = res.info.data[0];
+					}
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
 		}
 	});
 </script>

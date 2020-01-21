@@ -6,19 +6,21 @@
 			<div class="tt" :class="currentUrl=='/index.html'?'on':''"><a href="index.html">福茶</a></div>
 			<div class="tt" :class="currentUrl=='/quality.html'?'on':''"><a href="quality.html">福茶品质</a></div>
 			<div class="tt" :class="currentUrl=='/strategy.html'?'on':''"><a href="strategy.html">赚钱攻略</a></div>
-			<div class="tt" :class="currentUrl=='/login.html'?'on':''"><a href="login.html">个人中心</a></div>
+			<div class="tt" :class="currentUrl=='/login.html'||currentUrl=='/center.html'?'on':''">
+				<a @click="checkLogin()">个人中心</a>
+			</div>
 			<div class="tt" :class="currentUrl=='/aboutUs.html'?'on':''"><a href="aboutUs.html">关于我们</a></div>
 		</div>
 		<div class="flex">
 			<img style="width: 23px;height: 28px;display: block;" src="images/home-icon.png" >
-			<span class="fs14 mgl10">咨询电话：400-562-1123</span>
+			<span class="fs14 mgl10">咨询电话：{{phoneData.url}}</span>
 		</div>
 	</div>
 	<div class="headH"></div>
 	
 	<div class="swiperBox">
 		<div class="banner" v-for="(item,index) in bannerData" v-show="index==banner_index" >
-			<img :src="item.banImgUrl" />
+			<img :src="item.url" />
 		</div>
 		
 		<!-- 导航点 -->
@@ -48,15 +50,14 @@
 				currentUrl:'',
 				is_show:false,
 				bannerData:[
-					{banImgUrl:"images/banner.jpg"},
-					{banImgUrl:"images/pinzhi-img28.jpg"}
+					
 				],
 				searchItem:{
 					thirdapp_id:window.base.thirdapp_id,
 					title:''
 				},
 				bannerTimer:null,
-				
+				phoneData:{}
 	        }
 	    },
 	    created:function () {
@@ -71,7 +72,7 @@
 			};
 			
 
-    		window.base.bus.$on('to_headBanner',(res)=>{	
+    		/* window.base.bus.$on('to_headBanner',(res)=>{	
 				if(res.mainImg){
 					 self.bannerData = res.mainImg
 					 return
@@ -80,8 +81,10 @@
 				this.searchItem.title = res.title;
 				
 	        	this.to_headBanner()
-		    });
+		    }); */
 			
+			this.getSliderData();
+			this.getPhoneData();
 			self.bannerTimer = setInterval(function(){
 				self.changeBanner('+');
 			},3000)
@@ -94,6 +97,48 @@
 			self.bannerTimer = null;
 		},
 	    methods: {
+			
+			getPhoneData(){
+			    var self = this;
+				const postData = {
+					searchItem:{
+						thirdapp_id:2,
+						title:'联系方式'
+					}
+				};
+			    var callback = function(res){
+					if(res.info.data.length>0){
+						 self.phoneData = res.info.data[0];
+					}
+			    };
+			    window.base.labelGet(postData, callback);
+			},
+			
+			checkLogin(){
+				const self = this;
+				if (localStorage.getItem('isTure')) {
+					window.location.href = 'center.html'
+				}else{
+					window.location.href = 'login.html'
+				}
+			},
+			
+			getSliderData: function(id){
+			    var self = this;
+				const postData = {
+					thirdapp_id:2,
+					searchItem:{
+						title:'轮播图'
+					}
+				};
+			    var callback = function(res){
+			        console.log('getMainData', res);
+			        self.bannerData= res.info.data[0].mainImg;
+			        
+			    };
+				console.log('self.mainData',self.mainData)
+			    window.base.labelGet(postData, callback);
+			},
 			
 			toBannerOne:function(e){
 				const self = this;

@@ -23,11 +23,10 @@
 		<div class="w1200 pdt50">
 			<div class="xqfor fs16">
 				<div class="text-img">
-					<img class="companyImg" src="images/about-img.jpg" />
+					<img class="companyImg" :src="mainData.mainImg&&mainData.mainImg[0]?mainData.mainImg[0].url:''" />
 				</div>
-				<div class="textInfor">
-					<p>“阿里优选—福茶”是阿里新零售布局的重要一环，由阿里系联合上市公司共同出资十数亿元，国家发改委立项，荣获惠农专项补贴的国家级茶叶重点发展项目，旨在减少茶叶销售的中间环节，将利润最大限度的反馈给消费者和茶农。为了解决现阶段开网店成本高、投入大、耗费精力，利润不稳定的问题，福茶采用社交电商的运营模式，打造适合普通人群的全民分享赚钱模式，会员无需耗费人力精力，只需分享产品就可实现盈利。</p>
-					<p>福茶项目是由茶叶原产地茶农直接发货，越过所有省市级代理商、网店批发商、各种渠道的零售商，直接送达客户手里，打造茶品类的F2C最简模式，将中间的所有利润，全部分配给茶农和消费者。凭借高效的运营模式和股东巨额资金支持，以及政府的全方位支持，按照股东和政府要求，预计三年之内，“福茶”项目在全国加盟会员超过100万人，覆盖全国所有地区，年销售额超过500亿，成为国内茶叶零售市场的龙头，加入会员每年分得约200亿的分享收入。对于加入较早想赚钱的会员，给予全方位扶持，争取让这批人年收入超过1000万，另外至少1万个会员年收入超过100万。</p>
+				<div class="textInfor" v-html="mainData.content">
+					
 				</div>
 			</div>
 			<div class="contact pdtb20">
@@ -38,7 +37,7 @@
 					</li>
 					<li class="flex">
 						<img class="icon" src="images/about-icon1.png" >
-						<p class="text">客服微信：12345674878777zz</p>
+						<p class="text">客服微信：{{labelData.description}}</p>
 					</li>
 				</ul>
 			</div>
@@ -57,30 +56,64 @@
 		        	banner_index:0,
 					is_show:false,
 					wx_show:2,
-					mainData: [],
-					labelData: [],
-					swipeBanner:[
-						"images/banner.png",
-						"images/banner.png",
-						"images/banner.png"
-					],
-					首页轮播:[]
+					mainData: {},
+					首页轮播:[],
+					footerData:{},
+					labelData:{}
 		        }
 		    },
+			
+			created: function() {
+				var self = this;
+				self.getMainData();
+				self.getLabelData()
+			},
+			
 		    methods: {
-				getMainData: function(id){
+				
+				getLabelData(){
 				    var self = this;
+					const postData = {
+						searchItem:{
+							thirdapp_id:2,
+							title:'联系方式'
+						}
+					};
 				    var callback = function(res){
-				        console.log('getMainData', res);
-				        self.mainData.push.apply(self.mainData,res.info.data);
-				        for (var i = 0; i < self.mainData.length; i++) {
-				        	self[self.mainData[i].title] = self.mainData[i];
-				        };
-				        self.getNewsData()
+						if(res.info.data.length>0){
+							 self.labelData = res.info.data[0];
+						}
 				    };
 					console.log('self.mainData',self.mainData)
 				    window.base.labelGet(postData, callback);
-				}
+				},
+				
+				getMainData(){
+				    var self = this;
+					const postData = {
+						searchItem:{
+							thirdapp_id:2
+						}
+					};
+					postData.getBefore = {
+						caseData: {
+							tableName: 'Label',
+							searchItem: {
+								title: ['=', ['关于我们']],
+							},
+							middleKey: 'menu_id',
+							key: 'id',
+							condition: 'in',
+						},
+					};
+				    var callback = function(res){
+						if(res.info.data.length>0){
+							 self.mainData = res.info.data[0];
+						}
+				    };
+					console.log('self.mainData',self.mainData)
+				    window.base.articleGet(postData, callback);
+				},
 				
 		    }
 		});

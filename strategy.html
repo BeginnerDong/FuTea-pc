@@ -97,12 +97,12 @@
 					<span class="four">二级分享补贴</span>
 					<span class="five">复购价格/斤</span>
 				</div>
-				<div class="item flexRowBetween" v-for="(item,index) in tableDate" :key="index">
-					<span class="one">{{item.level}}</span>
-					<span class="two">{{item.specs}}</span>
-					<span class="three">{{item.classA}}</span>
-					<span class="four">{{item.classB}}</span>
-					<span class="five">{{item.weight}}</span>
+				<div class="item flexRowBetween" v-for="(item,index) in productData" :key="index">
+					<span class="one">{{item.title}}</span>
+					<span class="two">{{item.description}}</span>
+					<span class="three">{{item.passage1}}%</span>
+					<span class="four">{{item.passage2}}%</span>
+					<span class="five">{{item.o_price}}/斤</span>
 				</div>
 			</div>
 			<div class="h44"></div>
@@ -140,22 +140,74 @@
 					{level:'钻石',specs:'5000/3斤/特级',classA:'15%',classB:'2.5%',weight:'1700/斤'},
 					{level:'黄金',specs:'2000/1斤/特级',classA:'6%',classB:'1%',weight:'2000/斤'},
 					{level:'白银',specs:'1000/1斤/特级',classA:'3%',classB:'0.5%',weight:'3000/斤'}
-				]
+				],
+				productData:[]
 			}
 		},
+		
+		created: function() {
+			var self = this;
+			
+			self.getProductData();
+			
+		},
+		
 		methods: {
-			getMainData: function(id){
+			
+			getThirdappData(id){
 				var self = this;
-				var callback = function(res){
-					console.log('getMainData', res);
-					self.mainData.push.apply(self.mainData,res.info.data);
-					for (var i = 0; i < self.mainData.length; i++) {
-						self[self.mainData[i].title] = self.mainData[i];
-					};
-					self.getNewsData()
+				const postData = {
+					searchItem:{
+						id:2
+					}
 				};
-				console.log('self.mainData',self.mainData)
-				window.base.labelGet(postData, callback);
+				var callback = function(res){
+					if(res.solely_code==100000){
+						self.thirdappData = res.info.data[0];
+						for (var i = 0; i < self.productData.length; i++) {
+							if(self.productData[i].title=='皇冠'){
+								console.log(5646)
+								self.productData[i].passage1 = self.thirdappData.custom_rule.crown_one
+								self.productData[i].passage2 = self.thirdappData.custom_rule.crown_two
+							}else if(self.productData[i].title=='钻石'){
+								self.productData[i].passage1 = self.thirdappData.custom_rule.diamond_one
+								self.productData[i].passage2 = self.thirdappData.custom_rule.diamond_two
+							}else if(self.productData[i].title=='黄金'){
+								self.productData[i].passage1 = self.thirdappData.custom_rule.gold_one
+								self.productData[i].passage2 = self.thirdappData.custom_rule.gold_two
+							}else if(self.productData[i].title=='白银'){
+								self.productData[i].passage1 = self.thirdappData.custom_rule.silver_one
+								self.productData[i].passage2 = self.thirdappData.custom_rule.silver_two
+							}else if(self.productData[i].title=='普通'){
+								self.productData[i].passage1 = self.thirdappData.custom_rule.ordinary_one
+								self.productData[i].passage2 = self.thirdappData.custom_rule.ordinary_two
+							}
+								
+						}
+						console.log('self.productData',self.productData)
+					}
+				};
+				window.base.thirdappGet(postData, callback);
+			},
+			
+			getProductData(){
+				var self = this;
+				const postData = {
+					searchItem:{
+						thirdapp_id:2
+					}
+				};
+				postData.order = {
+					create_time:'asc'
+				};
+				var callback = function(res){
+					if(res.info.data.length>0){
+						self.productData.push.apply(self.productData,res.info.data);
+						
+					}
+					self.getThirdappData()
+				};
+				window.base.productGet(postData, callback);
 			}
 			
 		}

@@ -1,64 +1,162 @@
-
-<div class="footer fs12">
-			<div class="footcont ">
-				<div class="w1200 flexRowAround">
-					<div class="oneList flexRowBetween">
-						<div class="item L">
-							<div class="tit">微信号17320191041</div>
-							<img class="ewm" src="images/package-img.jpg" >
-						</div>
-						<div class="item M">
-							<div class="tit">股东背景</div>
-							<p class="p">阿里电商投资基金</p>
-							<p class="p">阿里战略发展基金</p>
-							<p class="p">香港新世界集团</p>
-						</div>
-						<div class="item R">
-							<div class="tit">网站链接</div>
-							<a class="p">首页&gt;</a>
-							<a class="p">福茶品质&gt;</a>
-							<a class="p">个人中心&gt;</a>
-						</div>
-					</div>
-					<div class="partnerBox">
-						<div class="pdtb20 fs16 mgb15">合作伙伴</div>
-						<div class="Partner flex">
-							<p class="item"><img src="images/home-img10.jpg" ></p>
-							<p class="item"><img src="images/home-img11.jpg" ></p>
-							<p class="item"><img src="images/home-img12.jpg" ></p>
-							<p class="item"><img src="images/home-img13.jpg" ></p>
-							<p class="item"><img src="images/home-img14.jpg" ></p>
-							<p class="item"><img src="images/home-img15.jpg" ></p>
-						</div>
-					</div>
+<div class="footer fs12" id="footer_app">
+	<div class="footcont ">
+		<div class="w1200 flexRowAround">
+			<div class="oneList flexRowBetween">
+				<div class="item L">
+					<div class="tit">微信号:{{footerData.description}}</div>
+					<img class="ewm" :src="footerData.mainImg&&footerData.mainImg[0]?footerData.mainImg[0].url:''">
+				</div>
+				<div class="item M">
+					<div class="tit">股东背景</div>
+					<p class="p">阿里电商投资基金</p>
+					<p class="p">阿里战略发展基金</p>
+					<p class="p">香港新世界集团</p>
+				</div>
+				<div class="item R">
+					<div class="tit">网站链接</div>
+					<a class="p" href="index.html">首页&gt;</a>
+					<a class="p" href="quality.html">福茶品质&gt;</a>
+					<a class="p" href="strategy.html">赚钱攻略&gt;</a>
+					<a class="p" href="aboutUs.html">关于我们&gt;</a>
 				</div>
 			</div>
-			<div class="copyRight center fs12">
-				<div class="w1200">
-					<p>Copyright© 2002-2019，香港新世界集团股份有限公司版权所有京ICP备10207551号-4</p>
-					<p>互联网农产品信息服务资格证书 (京) -经营性-2018-0005</p>
-					<p>北京市-朝阳区-建国门外大街一号</p>
+			<div class="partnerBox">
+				<div class="pdtb20 fs16 mgb15">合作伙伴</div>
+				<div class="Partner flex">
+					<p class="item"><img src="images/home-img10.jpg"></p>
+					<p class="item"><img src="images/home-img11.jpg"></p>
+					<p class="item"><img src="images/home-img12.jpg"></p>
+					<p class="item"><img src="images/home-img13.jpg"></p>
+					<p class="item"><img src="images/home-img14.jpg"></p>
+					<p class="item"><img src="images/home-img15.jpg"></p>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="copyRight center fs12">
+		<div class="w1200">
+			<p>Copyright© 2002-2019，香港新世界集团股份有限公司版权所有京ICP备10207551号-4</p>
+			<p>互联网农产品信息服务资格证书 (京) -经营性-2018-0005</p>
+			<p>北京市-朝阳区-建国门外大街一号</p>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+		var app = new Vue({
+		    el: '#footer_app',
+		    data:function(){
+		        return {
+		        	banner_index:0,
+					is_show:false,
+					wx_show:2,
+					footerData: {},
+					labelData: [],
+					
+					首页轮播:[]
+		        }
+		    },
+			
+			created: function() {
+				var self = this;
+				self.getMainData();
+			},
+			
+		    methods: {
+				
+				getMainData(){
+				    var self = this;
+					const postData = {
+						searchItem:{
+							thirdapp_id:2,
+							title:'联系方式'
+						}
+					};
+				    var callback = function(res){
+						if(res.info.data.length>0){
+							 self.footerData = res.info.data[0];
+						}
+				    };
+					console.log('self.mainData',self.mainData)
+				    window.base.labelGet(postData, callback);
+				},
+				
+		    }
+		});
+	</script>
 
 <style type="text/css">
-	
 	/* 页脚 */
-	.footcont{background: #575757; color: #D5D5D5;padding: 20px 0 30px 0;}
-	.oneList{ align-items: flex-start; width: 55%;}
-	.oneList .item{width: 33.3%;}
-	.oneList .item.R{width: 20%;}
-	.oneList .item .tit{margin-bottom: 20px; font-size: 16px;}
-	.oneList .item .p{margin-bottom: 10px;font-size: 14px; display: block; color: #b6b6b6;}
-	.oneList .item.R .p:hover{color: #FFF;}
-	.oneList .ewm{width: 120px; height:120px;}
-	.partnerBox{width: 35%;}
-	.partnerBox .Partner{flex-wrap: wrap;}
-	.partnerBox .Partner .item{width:  110px;height: 63px; overflow: hidden;margin:0 15px 15px 0;}
-	.partnerBox .Partner .item img{width: 100%;height:100%;display: block;}
-	
-	.copyRight{padding: 15px 5% 5px 5%; color: #b6b6b6;background: #282828;}
-	.copyRight p{padding-bottom: 10px;}
+	.footcont {
+		background: #575757;
+		color: #D5D5D5;
+		padding: 20px 0 30px 0;
+	}
+
+	.oneList {
+		align-items: flex-start;
+		width: 55%;
+	}
+
+	.oneList .item {
+		width: 33.3%;
+	}
+
+	.oneList .item.R {
+		width: 20%;
+	}
+
+	.oneList .item .tit {
+		margin-bottom: 20px;
+		font-size: 16px;
+	}
+
+	.oneList .item .p {
+		margin-bottom: 10px;
+		font-size: 14px;
+		display: block;
+		color: #b6b6b6;
+	}
+
+	.oneList .item.R .p:hover {
+		color: #FFF;
+	}
+
+	.oneList .ewm {
+		width: 120px;
+		height: 120px;
+	}
+
+	.partnerBox {
+		width: 35%;
+	}
+
+	.partnerBox .Partner {
+		flex-wrap: wrap;
+	}
+
+	.partnerBox .Partner .item {
+		width: 110px;
+		height: 63px;
+		overflow: hidden;
+		margin: 0 15px 15px 0;
+	}
+
+	.partnerBox .Partner .item img {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.copyRight {
+		padding: 15px 5% 5px 5%;
+		color: #b6b6b6;
+		background: #282828;
+	}
+
+	.copyRight p {
+		padding-bottom: 10px;
+	}
 </style>
+
 

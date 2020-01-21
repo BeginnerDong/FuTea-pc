@@ -30,12 +30,16 @@
 						<td class="four">二级分享补贴</td>
 						<td class="five">复购价格/斤</td>
 					</tr>
-					<tr v-for="(item,index) in tableDate" :key="index">
-						<td class="one flexCenter"  @click="changeVIP(index)"><img class="seltIcon" :src="seltCurr==index?'images/package-icon1.png':'images/package-icon.png'" alt="">{{item.level}}</td>
-						<td class="two">{{item.specs}}</td>
-						<td class="three">{{item.classA}}</td>
-						<td class="four">{{item.classB}}</td>
-						<td class="five">{{item.weight}}</td>
+					<tr v-for="(item,index) in productData" :key="index">
+						<td class="one flexCenter"  @click="changeVIP(index)">
+							<img class="seltIcon" 
+							:src="seltCurr==index?'images/package-icon1.png':'images/package-icon.png'" alt="">
+							{{item.title}}
+						</td>
+						<td class="two">{{item.description}}</td>
+						<td class="three">{{item.passage1}}%</td>
+						<td class="four">{{item.passage2}}%</td>
+						<td class="five">{{item.o_price}}/斤</td>
 					</tr>
 				</table>
 			</div>
@@ -53,7 +57,7 @@
 						<td>重量(斤)</td>
 					</tr>
 					<tr v-for="(item,index) in varietyData" :key="index">
-						<td>{{item.title}}</td>
+						<td>{{item.name}}</td>
 						<td class="flexCenter">
 							<div class="numBox flex">
 								<span @click="counter(index,'-')">-</span>
@@ -70,30 +74,30 @@
 				<div class="inforTwo pdt30 pdb10">
 					<p class="item flex">
 						<span>收货人姓名：</span>
-						<span class="input"><input type="text" name="" value="战歌" /></span>
+						<span class="input"><input type="text" name="" v-model="userInfo.name" /></span>
 					</p>
 					<p class="item flex">
 						<span>收货人电话：</span>
-						<span class="input"><input type="text" name="" value="15623235652" /></span>
+						<span class="input"><input type="text" name="" v-model="userInfo.phone" /></span>
 					</p>
 					<p class="item flex">
 						<span>收货人地址：</span>
-						<span class="input"><input type="text" name="" value="陕西省西安市雁塔区高新大都荟" /></span>
+						<span class="input"><input type="text" name="" v-model="userInfo.address" /></span>
 					</p>
 				</div>
 			</div>
 		
 			<div class="submitbtn" style="margin-top: 80px;">
-				<button class="Wbtn" type="button" @click="ewmPayShow">确定</button>
+				<button class="Wbtn" type="button" @click="submit">确定</button>
 			</div>
 			<div class="h100"></div>
 			
 			
-			<div class="black-bj" v-show="is_show"></div>
-			<div class="zhufuALert whiteBj center" v-show="is_ewmPayShow">
-				<h1 class="price red fs24 ftn">￥45623</h1>
-				<p class="fs14 pdt20">支付宝账号：15678898545</p>
-				<img class="ewm" src="images/home-img9.jpg" alt="">
+			<div class="black-bj" v-if="is_show"></div>
+			<div class="zhufuALert whiteBj center" v-if="is_ewmPayShow">
+				<h1 class="price red fs24 ftn">￥{{price}}</h1>
+				
+				<img class="ewm" :src="url" alt="">
 				<p class="fs12 color6">支付仅支持支付宝，请用支付宝扫码进行支付</p>
 				<span class="closeBtn" @click="ewmPayShow">×</span>
 			</div>
@@ -122,50 +126,234 @@
 					],
 					seltCurr:0,
 					varietyData:[
-						{title:'金骏眉',count:'0'},
-						{title:'铁观音',count:'0'},
-						{title:'大红袍',count:'0'},
-						{title:'西湖龙井',count:'0'},
-						{title:'碧螺春',count:'0'},
-						{title:'茉莉花茶',count:'0'}
+						
 					],
-					is_ewmPayShow:false
+					is_ewmPayShow:false,
+					productData:[],
+					userInfo:{},
+					submitData:{
+						snap_product:[]
+					},
+					url:'',
+					price:0
 		        }
 		    },
+			
+			created: function() {
+				var self = this;
+				self.userInfo = window.base.getStorageArray('user_info')[0].info;
+				console.log('userInfo',self.userInfo);
+				
+				self.getProductData();
+				
+			},
+			
 		    methods: {
 				changeVIP(index){
 					const self = this;
-					self.seltCurr = index
+					self.seltCurr = index;
+					self.productId = self.productData[self.seltCurr].id;
+					for (var i = 0; i < self.varietyData.length; i++) {
+						self.varietyData[i].count = 0
+					};
 				},
+				
+				submit(){
+					const self = this;
+					
+					for (var i = 0; i < self.varietyData.length; i++) {
+						if(self.varietyData[i].count>0){
+							self.submitData.snap_product.push(self.varietyData[i])
+						}
+					};
+					if(self.submitData.snap_product.length==0){
+						alert('请选择茶的种类');
+						return
+					};
+					var data = window.base.cloneForm(self.submitData);
+					var orderList = [
+						{product_id:self.productId,count:1,type:1,data:data}
+					];
+					self.pay = {
+						ThirdPay:{
+							price:self.productData[self.seltCurr].price
+						}
+					};
+					self.addOrder(orderList)	
+				},
+				
+				addOrder(orderList) {
+					const self = this;	
+					/* if(self.orderId){
+						 self.payNow();
+						 return
+					}; */
+					const postData = {}; 
+					postData.orderList = window.base.cloneForm(orderList);
+					postData.token=localStorage.getItem('user_token')
+					const callback = (res) => {
+						if (res && res.solely_code == 100000) {
+							self.orderId = res.info.id;
+							self.payNow()
+						} else {		
+							alert(res.msg)
+						};		
+					};
+					window.base.addOrder(postData, callback);
+				},
+				
+				
+				
+				payNow(order_id) {
+					const self = this;	
+					
+					const postData = window.base.cloneForm(self.pay);
+					postData.token = localStorage.getItem('user_token');
+					postData.searchItem = {
+						id: self.orderId
+					};	
+					const callback = (res) => {
+						if (res.solely_code == 100000) {
+							
+							var url = 'https://api.sdpay.cc/pay?app_id='
+							+res.info.app_id
+							+'&order_amount='+res.info.order_amount
+							+'&pay_type='+res.info.pay_type
+							+'&order_no='+res.info.order_no
+							+'&order_uid='+res.info.order_uid
+							+'&trade_name='+res.info.trade_name
+							+'&sign='+res.info.sign
+							window.location.href = url
+							
+							/* self.url = res.info.qr_img;
+							self.price = res.info.pay_amount;
+							self.is_show = true;
+							self.is_ewmPayShow = true;
+							localStorage.removeItem('user_token');
+							localStorage.removeItem('user_no');
+							localStorage.removeItem('user_info');
+							window.location.href = './login.html'
+							self.interval = setInterval(function(){
+							  self.getOrderData()
+							},1000) */
+						} else {
+							alert(res.info.msg)
+						};
+					};
+					window.base.pay(postData, callback);
+				},
+				
+				getOrderData(){
+					var self = this;
+					const postData = {
+						searchItem:{
+							thirdapp_id:2,
+							id:self.orderId
+						}
+					};
+					postData.token = localStorage.getItem('user_token');
+					var callback = function(res){
+						if(res.info.data.length>0){
+							if(res.info.data[0].pay_status==1){
+								alert('支付成功');
+								localStorage.removeItem('user_token');
+								localStorage.removeItem('user_no');
+								localStorage.removeItem('user_info');
+								clearInterval(self.interval)
+								window.location.href = './login.html'
+							}
+						}
+					};
+					window.base.orderGet(postData, callback);
+				},
+				
 				counter(index,type) {
 					const self = this;
 					if (type == '+') {
+						var count = 0;
+						for (var i = 0; i < self.varietyData.length; i++) {
+							count += self.varietyData[i].count
+						};
+						if(count>=parseInt(self.productData[self.seltCurr].standard)){
+							alert('不能超过总斤数')
+							return
+						};
 						self.varietyData[index].count++;
+						
 					} else {
-						if (self.varietyData[index].count > 1) {
+						if (self.varietyData[index].count > 0) {
 							self.varietyData[index].count--;
 						}
 					};
-					self.$Utils.setStorageArray('cartData', self.varietyData[index], 'id', 999);
-					self.countTotalPrice();
+					
 				},
+				
 				ewmPayShow(){
 					const self = this;
 					self.is_ewmPayShow = !self.is_ewmPayShow;
 					self.is_show = !self.is_show
 				},
-				getMainData: function(id){
-				    var self = this;
-				    var callback = function(res){
-				        console.log('getMainData', res);
-				        self.mainData.push.apply(self.mainData,res.info.data);
-				        for (var i = 0; i < self.mainData.length; i++) {
-				        	self[self.mainData[i].title] = self.mainData[i];
-				        };
-				        self.getNewsData()
-				    };
-					console.log('self.mainData',self.mainData)
-				    window.base.labelGet(postData, callback);
+				
+				getThirdappData(id){
+					var self = this;
+					const postData = {
+						searchItem:{
+							id:2
+						}
+					};
+					var callback = function(res){
+						if(res.solely_code==100000){
+							self.thirdappData = res.info.data[0];
+							var varietyData = self.thirdappData.app_description.split(",");
+							
+							for (var i = 0; i < varietyData.length; i++) {
+								self.varietyData.push({name:varietyData[i],count:0})
+							};
+							console.log('self.varietyData',self.varietyData)
+							for (var i = 0; i < self.productData.length; i++) {
+								if(self.productData[i].title=='皇冠'){
+									console.log(5646)
+									self.productData[i].passage1 = self.thirdappData.custom_rule.crown_one
+									self.productData[i].passage2 = self.thirdappData.custom_rule.crown_two
+								}else if(self.productData[i].title=='钻石'){
+									self.productData[i].passage1 = self.thirdappData.custom_rule.diamond_one
+									self.productData[i].passage2 = self.thirdappData.custom_rule.diamond_two
+								}else if(self.productData[i].title=='黄金'){
+									self.productData[i].passage1 = self.thirdappData.custom_rule.gold_one
+									self.productData[i].passage2 = self.thirdappData.custom_rule.gold_two
+								}else if(self.productData[i].title=='白银'){
+									self.productData[i].passage1 = self.thirdappData.custom_rule.silver_one
+									self.productData[i].passage2 = self.thirdappData.custom_rule.silver_two
+								}else if(self.productData[i].title=='普通'){
+									self.productData[i].passage1 = self.thirdappData.custom_rule.ordinary_one
+									self.productData[i].passage2 = self.thirdappData.custom_rule.ordinary_two
+								}
+									
+							}
+							console.log('self.productData',self.productData)
+						}
+					};
+					window.base.thirdappGet(postData, callback);
+				},
+				
+				getProductData(){
+					var self = this;
+					const postData = {
+						searchItem:{
+							thirdapp_id:2
+						}
+					};
+					postData.order = {
+						create_time:'asc'
+					};
+					var callback = function(res){
+						if(res.info.data.length>0){
+							self.productData.push.apply(self.productData,res.info.data);
+							self.productId = self.productData[0].id;
+						}
+						self.getThirdappData()
+					};
+					window.base.productGet(postData, callback);
 				}
 				
 		    }

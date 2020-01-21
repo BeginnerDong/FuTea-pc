@@ -1,5 +1,5 @@
 window.base = {
-	g_restUrl: 'http://www.xianaxty.com/api/public/index.php/api/v1/',
+	g_restUrl: 'http://106.12.155.217/tea/public/index.php/api/v1/',
 
 	thirdapp_id:2,
 	test:666,
@@ -182,6 +182,18 @@ window.base = {
 		};
 		this.getData(allParams);
 	},
+	
+	thirdappGet:function(param, callback) {
+		var allParams = {
+			url: 'Base/ThirdApp/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		this.getData(allParams);
+	},
 
 	pay: function(param, callback) {
 		var allParams = {
@@ -199,27 +211,29 @@ window.base = {
 		if (!params.type) {
 			params.type = 'get';
 		}
+		if(params.data.url){
+			var url = params.data.url;
+			delete params.data.url
+		}else{
+		   var url = this.g_restUrl + params.url;
+		   
+		}
 		var that = this;
 		$.ajax({
 			type: params.type,
-			url: this.g_restUrl + params.url,
+			url: url,
 			data: params.data,
 			success: function(res) {
 				if (res.solely_code == 201000) {
 					var loca = window.location;
 					window.location.href = loca.origin + loca.pathname;
 				} else if (res.solely_code == 200000) {
-					console.log(that.GetUrlRelativePath().substr(1, 2));
-					if (that.GetUrlRelativePath().substr(1, 2) == 'wx') {
 
-						localStorage.removeItem('merchant_token');
-						localStorage.removeItem('merchant_no');
-						window.location.href = './wxBusinessLogin.html'
-					} else {
 						localStorage.removeItem('user_token');
 						localStorage.removeItem('user_no');
-						that.getUserToken();
-					};
+						localStorage.removeItem('user_info');
+						window.location.href = './login.html'
+					
 				} else {
 					params.sCallback && params.sCallback(res);
 				};
@@ -229,6 +243,30 @@ window.base = {
 				console.log('ajax-error', JSON.stringify(res));
 			}
 		});
+	},
+	
+	codeGet(param, callback) {
+		var allParams = {
+			url: 'Project/Solely/getCode',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		this.getData(allParams)
+	},
+	
+	thirdPay(param, callback) {
+		var allParams = {
+			url: 'https://api.sdpay.cc/pay',
+			type: 'get',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		this.getData(allParams)
 	},
 
 	articleList: function(param, callback) {
@@ -543,6 +581,18 @@ window.base = {
 		};
 		this.getData(allParams);
 	},
+	
+	login: function(param, callback) {
+		var allParams = {
+			url: 'Project/Solely/login',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		this.getData(allParams);
+	},
 
 
 
@@ -796,7 +846,7 @@ window.base = {
 	},
 
 
-	login: function(param, callback) {
+	/* login: function(param, callback) {
 
 		var allParams = {
 			url: 'Func/Common/loginByUp',
@@ -807,7 +857,7 @@ window.base = {
 			}
 		};
 		this.getData(allParams)
-	},
+	}, */
 
 	/*    checkComplete:function(obj){
 	        var pass = true;
